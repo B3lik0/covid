@@ -1,21 +1,17 @@
 const puppeteer = require("puppeteer");
-
+const fetch = require("node-fetch");
 module.exports = {
   async casos(url) {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(url);
-
-    let texts = await page.evaluate(() => {
-      let data='';
-      let elements = document.getElementsByClassName("tZjT9b");
-      for (var i = 0; i < elements.length; i++) {
-        var element = elements[i].innerText
-        data = element.toString();
-      }
-       return data;
-     });
-    browser.close();
-    return texts;
+    try {
+      const res = await fetch(
+        "https://api.apify.com/v2/key-value-stores/vpfkeiYLXPIDIea2T/records/LATEST?disableRedirect=true"
+      );
+      const data = await res.json();
+      //const newDta = this.convertir(data.State);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
   },
+  
 };
